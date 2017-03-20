@@ -1,0 +1,6 @@
+:global(table) {
+    width: 100%;
+}
+:global(table td){
+    text-align:center
+}

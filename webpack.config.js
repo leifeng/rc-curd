@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var basewepback = {
-    entry: ['./src/app'],
+    entry: ['./app.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -52,7 +52,7 @@ if (process.env.NODE_ENV !== 'production') {
         'react-hot-loader/patch',
         'webpack-dev-server/client?http://localhost:8000',
         'webpack/hot/only-dev-server',
-        './src/app.js'
+        './app.js'
     ]
     basewepback.devtool = "inline-source-map";
     basewepback.devServer = {

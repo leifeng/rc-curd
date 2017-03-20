@@ -4,21 +4,18 @@ class TBody extends Component {
     static propTypes = {
         dataSource: PropTypes.array,
         colunms: PropTypes.array,
-        deleted: PropTypes.func,
-        update: PropTypes.func,
+        deleted: PropTypes.bool,
+        update: PropTypes.bool,
+        onVisibleChange: PropTypes.func,
+        onIsEditChange: PropTypes.func,
+        onItemChange: PropTypes.func
     }
 
     static defaultProps = {
         colunms: [],
         dataSource: [],
-        deleted() { },
-        update() { },
-    }
-    constructor(){
-        super();
-        this.state={
-            popupVisible:false
-        }
+        deleted: false,
+        update: false,
     }
     render() {
         const { dataSource, colunms, deleted, update } = this.props;
@@ -33,19 +30,21 @@ class TBody extends Component {
                             return <td key={_index}>{item[_item.field]}</td>
                         })}
                         <td>
-                            {deleted ? <a onClick={() => deletedAction(item)}>删除</a> : null}
-                            {update ? <a onClick={() => updateAction(item)}>编辑</a> : null}
+                            {deleted ? <a onClick={this.deletedAction.bind(null, item)}>删除</a> : null}
+                            {update ? <a onClick={this.updateAction.bind(null, item)}>编辑</a> : null}
                         </td>
                     </tr>
                 })}
             </tbody>
         )
     }
-    deletedAction() {
-
+    deletedAction = (item) => {
+        this.props.deleted(item)
     }
-    updateAction(){
-
+    updateAction = (item) => {
+        this.props.onVisibleChange(true)
+        this.props.onIsEditChange('编辑', true)
+        this.props.onItemChange(item);
     }
 }
 export default TBody;

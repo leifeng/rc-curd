@@ -1,0 +1,13 @@
+.normal{
+    overflow: hidden
+}
+.label{
+    float: left;
+    text-align: right;
+    height: 30px;
+    line-height: 30px;
+    display: block;
+}
+.form{
+    float: left;
+}

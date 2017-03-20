@@ -1,5 +1,80 @@
-.normal{
-    width: 800px;
-    height: 500px;
-    color:red
+.normal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.mask {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+}
+
+.popup {
+    width: 600px;
+    height: auto;
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    margin-left: -300px;
+    background-color: #fff;
+    border: 1px solid #d8d8d8;
+    border-radius: 4px;
+}
+
+.title {
+    text-indent: 10px;
+    height: 30px;
+    line-height: 30px;
+    font-weight: bold;
+    border-bottom: 1px solid #d8d8d8;
+}
+
+.body {
+    padding: 10px;
+}
+
+.footer {
+    border-top: 1px solid #d8d8d8;
+    padding-top: 10px;
+}
+
+.footer a {
+    float: right;
+    display: block;
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    margin: 0 5px 5px 0;
+}
+
+.cancel {
+    background-color: #bfbfbf;
+    color: #000;
+}
+
+.cancel:hover {
+    background-color: #d9d9d9;
+}
+
+.cancel:active {
+    background-color: #919191;
+    color: #fff;
+}
+
+.confirm {
+    background-color: #3576C6;
+    color: #fff;
+}
+
+.confirm:hover {
+    background-color: #3D87DB
+}
+
+.confirm:active {
+    background-color: #2D65B0
 }
