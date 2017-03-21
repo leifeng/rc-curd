@@ -47,8 +47,8 @@ class Curd extends Component {
                     title={title}
                     visible={visible}
                     onVisibleChange={this.onVisibleChange}
-                    onOk={this.onOK}>
-                    <Form data={item} colunms={colunms} />
+                    onSubmit={this.onSubmit}>
+                    <Form data={item} colunms={colunms} onSetFields={this.onSetFields} onSubmit={this.onSubmit} />
                 </Popup>
             </div>
         )
@@ -63,10 +63,24 @@ class Curd extends Component {
     }
     //item
     onItemChange = (item) => {
-        this.setState({ item })
+        this.setState({ item }, () => {
+            console.log('onItemChange', this.state.item)
+        })
+    }
+    onSetFields = (field, value) => {
+        const newState = {};
+        newState[field] = value
+        this.setState({
+            item: { ...this.state.item, ...newState }
+        }, () => {
+            console.log('onSetFields', this.state.item)
+        })
+
     }
     //点击确认按钮
-    onOK = () => {
+    onSubmit = (e) => {
+        // console.log(e)
+        // e.preventDefault();
         const { item, isEdit } = this.state;
         if (isEdit) {
             this.props.update(item)

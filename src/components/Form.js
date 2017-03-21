@@ -1,24 +1,38 @@
 import React, { Component, PropTypes } from 'react';
 import FormType from './FormType';
 class Form extends Component {
+    static defaultProps = {
+        data: {},
+        colunms: [],
+        onSubmit() { },
+        onSetFields() { }
+    }
+    static propTypes = {
+        data: PropTypes.object,
+        colunms: PropTypes.array,
+        onSubmit: PropTypes.func,
+        onSetFields: PropTypes.func
+    }
     render() {
-        const { colunms } = this.props;
+        const { data, colunms, onSubmit, onSetFields } = this.props;
         const layout = {
             label: 3,
             from: 8
         }
         return (
-            <form onSubmit={this.onSubmit} ref={(form) => this.form = form}>
+            <form onSubmit={onSubmit}>
                 {colunms.map((item, index) => {
-                    console.log(item)
-                    return <FormType {...item} key={index}/>
+                    const value = data && data[item.field] || null
+                    const formTypeProps = {
+                        ...item,
+                        key: index,
+                        onSetFields
+                    }
+                    value && (formTypeProps['value'] = value)
+                    return <FormType {...formTypeProps} />
                 })}
             </form>
         )
-    }
-    onSubmit = (e) => {
-        console.log(this.form[1].name);
-        e.preventDefault();
     }
 }
 export default Form;

@@ -18,18 +18,23 @@ const curdProps = {
         {
             name: '姓名',
             field: 'name',
-            formType: 'text'
+            formType: 'Text'
         },
         {
             name: '年龄',
             field: 'age',
-            formType: 'text'
+            formType: 'Text'
         },
         {
             name: '性别',
             field: 'sex',
-            formType: 'radio',
+            formType: 'Radio',
             dic: [{ label: '男', value: 1 }, { label: '女', value: 0 }]
+        }, {
+            name: '类别',
+            field: 'type',
+            formType: 'Select',
+            dic: [{ label: '类别0', value: 0 }, { label: '类别1', value: 1 }, { label: '类别2', value: 2 }]
         }
     ],
     dataSource: [
@@ -37,12 +42,14 @@ const curdProps = {
             id: '1',
             age: 10,
             name: '张',
+            type:1
         },
         {
             id: '2',
-
+            sex: 0,
             age: 20,
             name: '张2',
+            type:2
         }
     ]
 }
