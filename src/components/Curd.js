@@ -1,93 +1,120 @@
-import React, { Component, PropTypes } from 'react';
-import styles from './Curd.css';
-import THead from './THead';
-import TBody from './TBody'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Popup from './Popup'
-import Form from './Form'
-class Curd extends Component {
+import Form from './form/Form';
+import styles from './Curd.css'
+export default class Curd extends Component {
     static propTypes = {
-        dataSource: PropTypes.array,
-        colunms: PropTypes.array,
+        colunms: PropTypes.array.isRequired,
+        dataSource: PropTypes.array.isRequired,
+        create: PropTypes.func,
         deleted: PropTypes.func,
-        update: PropTypes.func,
-        create: PropTypes.func
+        update: PropTypes.func
     }
     static defaultProps = {
-        deleted: null,
-        update: null,
         create: null,
-        colunms: [],
-        dataSource: []
+        deleted: null,
+        update: null
     }
+
     constructor() {
         super();
         this.state = {
-            visible: false,
-            title: '',
-            isEdit: false,
-            item: null
+            loading: false,
+            popUpVisible: false, 
+            popTitle: '',
+            dataItem: null
         }
     }
+
     render() {
-        const { create, deleted, update, colunms, dataSource } = this.props;
-        const { visible, title, item } = this.state;
+        const { colunms, dataSource, deleted, update, create } = this.props;
+        const { popTitle, popUpVisible, dataItem } = this.state;
         return (
-            <div>
-                <table className={styles.normal}>
-                    <THead colunms={colunms} hasAction={!!(deleted || update)} />
-                    <TBody colunms={colunms}
-                        dataSource={dataSource}
-                        deleted={!!deleted}
-                        update={!!update}
-                        onVisibleChange={this.onVisibleChange}
-                        onIsEditChange={this.onIsEditChange}
-                        onItemChange={this.onItemChange} />
-                </table>
+            <div className={styles.normal}>
+                {typeof create === 'function' ? <a className={styles.add} onClick={() => this.popUpChange(true, '添加')}>添加</a> : null}
+                <div>
+                    <table className={styles.table}>
+                        <thead>
+                            <tr>
+                                {colunms.map((item, index) => {
+                                    return <th key={index} className={styles.th}>{item.name}</th>
+                                })}
+                                <th key="actions" className={styles.th}>{deleted||update?"操作":""}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {dataSource.map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        {colunms.map((o, i) => {
+                                            if (o.render) {
+                                                return o.render(item);
+                                            }
+                                            return <td key={i} className={styles.td}>{this.dic2value(o.dic, item[o.field])}</td>
+                                        })}
+                                        <td key="action" className={styles.td}>
+                                            {typeof deleted === 'function' ? <a>删除</a> : null}
+                                            {typeof update === 'function' ? <a onClick={() => { this.popUpChange(true, '编辑'); this.onItemChange(item) }}>编辑</a> : null}
+                                        </td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
+                </div>
                 <Popup
-                    title={title}
-                    visible={visible}
-                    onVisibleChange={this.onVisibleChange}
+                    title={popTitle}
+                    visible={popUpVisible}
+                    onVisibleChange={this.popUpChange}
                     onSubmit={this.onSubmit}>
-                    <Form data={item} colunms={colunms} onSetFields={this.onSetFields} onSubmit={this.onSubmit} />
+
+                    <Form data={dataItem} colunms={colunms} onSetFields={this.onSetFields} onSubmit={this.onSubmit} />
                 </Popup>
             </div>
         )
     }
-    //修改弹出层visible
-    onVisibleChange = (visible) => {
-        this.setState({ visible })
+
+    dic2value = (dic, value) => {
+        if (dic && value || value === 0) {
+            return dic.filter((o) => {
+                return o.value == value
+            })[0]['label']
+        }
+        return value
     }
-    //修改标题
-    onIsEditChange = (title, isEdit) => {
-        this.setState({ title, isEdit })
+    popUpChange = (visible, title = '') => {
+        const newState = {};
+        newState['popUpVisible'] = visible;
+        newState['popTitle'] = title;
+        if (!visible) {
+            newState['dataItem'] = null;
+        }
+        this.setState(newState)
     }
-    //item
-    onItemChange = (item) => {
-        this.setState({ item }, () => {
-            console.log('onItemChange', this.state.item)
+    onItemChange(record) {
+        this.setState({
+            dataItem: record
         })
+        console.log(record)
     }
     onSetFields = (field, value) => {
         const newState = {};
         newState[field] = value
         this.setState({
-            item: { ...this.state.item, ...newState }
+            dataItem: { ...this.state.dataItem, ...newState }
         }, () => {
-            console.log('onSetFields', this.state.item)
+            console.log('onSetFields', this.state.dataItem)
         })
-
     }
-    //点击确认按钮
     onSubmit = (e) => {
         // console.log(e)
         // e.preventDefault();
-        const { item, isEdit } = this.state;
-        if (isEdit) {
-            this.props.update(item)
+        const { dataItem, popTitle } = this.state;
+        if (popTitle === "编辑") {
+            this.props.update(dataItem)
         } else {
-            this.props.create(item)
+            this.props.create(dataItem)
         }
     }
 }
-
-export default Curd

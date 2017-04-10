@@ -1,6 +1,3 @@
-:global(table) {
-    width: 100%;
-}
-:global(table td){
-    text-align:center
+:global(html,body){
+    font-family:'微软雅黑'
 }

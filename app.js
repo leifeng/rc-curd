@@ -4,8 +4,8 @@ import { AppContainer } from 'react-hot-loader';
 
 import Curd from './src/index'
 const curdProps = {
-    create() {
-
+    create(item) {
+        console.log(item)
     },
     deleted(item) {
         console.log(item)
@@ -18,12 +18,12 @@ const curdProps = {
         {
             name: '姓名',
             field: 'name',
-            formType: 'Text'
+            formType: 'Input'
         },
         {
             name: '年龄',
             field: 'age',
-            formType: 'Text'
+            formType: 'Input'
         },
         {
             name: '性别',
@@ -40,16 +40,24 @@ const curdProps = {
     dataSource: [
         {
             id: '1',
+            sex: 0,
             age: 10,
             name: '张',
-            type:1
+            type: 1
         },
         {
             id: '2',
             sex: 0,
             age: 20,
             name: '张2',
-            type:2
+            type: 2
+        },
+        {
+            id: 3,
+            sex: 1,
+            age: 10,
+            name: '张3',
+            type: 0
         }
     ]
 }

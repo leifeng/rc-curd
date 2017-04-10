@@ -54,7 +54,7 @@ if (process.env.NODE_ENV !== 'production') {
         'webpack/hot/only-dev-server',
         './app.js'
     ]
-    basewepback.devtool = "inline-source-map";
+    basewepback.devtool = "cheap-module-eval-source-map";
     basewepback.devServer = {
         host: 'localhost',
         port: 8000,
@@ -66,7 +66,7 @@ if (process.env.NODE_ENV !== 'production') {
         new webpack.NamedModulesPlugin()
     ]
 } else {
-
+    basewepback.devtool = "cheap-module-source-map";
 }
 module.exports = basewepback
 

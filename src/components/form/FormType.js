@@ -1,8 +1,7 @@
 import React from 'react';
-import styles from './FormType.css'
+
 const FormType = (props) => {
-    const { name, field, dic, formType, value, onSetFields } = props;
-    console.log('value', value)
+    const { type, value, field, onSetFields, dic } = props;
 
     const onChange = (field) => {
         return (e) => {
@@ -10,10 +9,10 @@ const FormType = (props) => {
         }
     }
 
-    const renderForm = () => {
-        switch (formType) {
-            case 'Text':
-                return <input type="text" value={value} onChange={onChange(field)} />
+    function renderItem() {
+        switch (type) {
+            case 'Input':
+                return <input value={value} onChange={onChange(field)} />
             case 'Radio':
                 return dic.map((item, index) => {
                     return <label key={index}>
@@ -28,14 +27,13 @@ const FormType = (props) => {
                     })}
                 </select>
             default:
-                return null
+                return null;
         }
     }
-    return <div className={styles.normal}>
-        <div className={styles.label}><label>{name}</label></div>
-        <div className={styles.form}>
-            {renderForm()}
+    return (
+        <div>
+            {renderItem()}
         </div>
-    </div>
+    )
 }
 export default FormType;
