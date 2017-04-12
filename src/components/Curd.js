@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Popup from './Popup'
+import Popup from './popup/Popup'
 import Form from './form/Form';
-import styles from './Curd.css'
+import styles from './Curd.css';
+import { toString } from '../utils'
+
 export default class Curd extends Component {
     static propTypes = {
         colunms: PropTypes.array.isRequired,
@@ -21,12 +23,12 @@ export default class Curd extends Component {
         super();
         this.state = {
             loading: false,
-            popUpVisible: false, 
+            popUpVisible: false,
             popTitle: '',
-            dataItem: null
+            dataItem: null,
+
         }
     }
-
     render() {
         const { colunms, dataSource, deleted, update, create } = this.props;
         const { popTitle, popUpVisible, dataItem } = this.state;
@@ -40,7 +42,7 @@ export default class Curd extends Component {
                                 {colunms.map((item, index) => {
                                     return <th key={index} className={styles.th}>{item.name}</th>
                                 })}
-                                <th key="actions" className={styles.th}>{deleted||update?"操作":""}</th>
+                                <th key="actions" className={styles.th}>{deleted || update ? "操作" : ""}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,12 +78,21 @@ export default class Curd extends Component {
     }
 
     dic2value = (dic, value) => {
-        if (dic && value || value === 0) {
-            return dic.filter((o) => {
-                return o.value == value
-            })[0]['label']
+        if (dic && dic.length > 0) {
+            if (Object.prototype.toString.call(value) === "[object Array]") {
+                return dic.filter(o => {
+                    return value.indexOf(toString(o.value)) !== -1
+                }).map((o) => o.label).join('')
+            } else {
+                if (value || value === 0) {
+                    return dic.filter((o) => {
+                        return o.value == value
+                    })[0]['label']
+                }
+            }
         }
         return value
+
     }
     popUpChange = (visible, title = '') => {
         const newState = {};
@@ -96,20 +107,15 @@ export default class Curd extends Component {
         this.setState({
             dataItem: record
         })
-        console.log(record)
     }
     onSetFields = (field, value) => {
         const newState = {};
         newState[field] = value
         this.setState({
             dataItem: { ...this.state.dataItem, ...newState }
-        }, () => {
-            console.log('onSetFields', this.state.dataItem)
         })
     }
     onSubmit = (e) => {
-        // console.log(e)
-        // e.preventDefault();
         const { dataItem, popTitle } = this.state;
         if (popTitle === "编辑") {
             this.props.update(dataItem)

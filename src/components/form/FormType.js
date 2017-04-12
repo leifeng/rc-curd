@@ -1,5 +1,6 @@
 import React from 'react';
-
+import RadioGroup from './Radio'
+import CheckBoxGroup from './CheckBox'
 const FormType = (props) => {
     const { type, value, field, onSetFields, dic } = props;
 
@@ -8,18 +9,20 @@ const FormType = (props) => {
             onSetFields(field, e.target.value)
         }
     }
-
+    const onCheckBoxChange = (field) => {
+        return (value) => {
+            onSetFields(field, value)
+        }
+    }
     function renderItem() {
         switch (type) {
+
             case 'Input':
                 return <input value={value} onChange={onChange(field)} />
             case 'Radio':
-                return dic.map((item, index) => {
-                    return <label key={index}>
-                        <input type="radio" checked={item.value == value} value={item.value} name={field} onChange={onChange(field)} />
-                        {item.label}
-                    </label>
-                });
+                return <RadioGroup options={dic} value={value} onChange={onChange(field)} />
+            case 'CheckBox':
+                return <CheckBoxGroup options={dic} value={value} onChange={onCheckBoxChange(field)} />
             case 'Select':
                 return <select value={value} onChange={onChange(field)}>
                     {dic.map((item, index) => {

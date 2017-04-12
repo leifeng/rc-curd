@@ -7,12 +7,15 @@ const curdProps = {
     create(item) {
         console.log(item)
     },
-    deleted(item) {
-        console.log(item)
-    },
     update(item) {
         console.log(item)
-
+    },
+    retrieve: {
+        url: 'xxx',
+        method: 'get'
+    },
+    deleted(item) {
+        console.log(item)
     },
     colunms: [
         {
@@ -35,6 +38,12 @@ const curdProps = {
             field: 'type',
             formType: 'Select',
             dic: [{ label: '类别0', value: 0 }, { label: '类别1', value: 1 }, { label: '类别2', value: 2 }]
+        },
+        {
+            name: '技能',
+            field: 'skill',
+            formType: 'CheckBox',
+            dic: [{ label: '类别0', value: 0 }, { label: '类别1', value: 1 }, { label: '类别2', value: 2 }]
         }
     ],
     dataSource: [
@@ -43,23 +52,30 @@ const curdProps = {
             sex: 0,
             age: 10,
             name: '张',
-            type: 1
+            type: 1,
+            skill: ['0', '1']
         },
         {
             id: '2',
             sex: 0,
             age: 20,
             name: '张2',
-            type: 2
+            type: 2,
+            skill: ['1']
         },
         {
             id: 3,
             sex: 1,
             age: 10,
             name: '张3',
-            type: 0
+            type: 0,
+            skill: ['1', '2']
         }
-    ]
+    ],
+    isPage: {
+        pageSize: 10,
+
+    }
 }
 
 
