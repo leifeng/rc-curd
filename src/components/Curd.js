@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Popup from './popup/Popup'
 import Form from './form/Form';
+import Pager from './pager'
 import styles from './Curd.css';
 import { toString } from '../utils'
 
@@ -19,19 +20,22 @@ export default class Curd extends Component {
         update: null
     }
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             loading: false,
             popUpVisible: false,
             popTitle: '',
             dataItem: null,
-
+            popUpDelVisible: false,
+            rowId: null,
+            currentIndex: 1,
+            totalPage:12
         }
     }
     render() {
         const { colunms, dataSource, deleted, update, create } = this.props;
-        const { popTitle, popUpVisible, dataItem } = this.state;
+        const { popTitle, popUpVisible, dataItem, deletePopup, popUpDelVisible, rowId, currentIndex,totalPage } = this.state;
         return (
             <div className={styles.normal}>
                 {typeof create === 'function' ? <a className={styles.add} onClick={() => this.popUpChange(true, '添加')}>添加</a> : null}
@@ -56,7 +60,7 @@ export default class Curd extends Component {
                                             return <td key={i} className={styles.td}>{this.dic2value(o.dic, item[o.field])}</td>
                                         })}
                                         <td key="action" className={styles.td}>
-                                            {typeof deleted === 'function' ? <a>删除</a> : null}
+                                            {typeof deleted === 'function' ? <a onClick={(e) => this.deleteConfirm(item.id)}>删除</a> : null}
                                             {typeof update === 'function' ? <a onClick={() => { this.popUpChange(true, '编辑'); this.onItemChange(item) }}>编辑</a> : null}
                                         </td>
                                     </tr>
@@ -64,6 +68,7 @@ export default class Curd extends Component {
                             })}
                         </tbody>
                     </table>
+                    <Pager totalPage={totalPage} currentIndex={currentIndex} onPageChange={this.onPageChange} />
                 </div>
                 <Popup
                     title={popTitle}
@@ -73,6 +78,13 @@ export default class Curd extends Component {
 
                     <Form data={dataItem} colunms={colunms} onSetFields={this.onSetFields} onSubmit={this.onSubmit} />
                 </Popup>
+                <Popup
+                    title="提示"
+                    visible={popUpDelVisible}
+                    onVisibleChange={this.popUpDelChange}
+                    onSubmit={this.deleteHandle}>
+                    是否要删除？
+                    </Popup>
             </div>
         )
     }
@@ -123,4 +135,18 @@ export default class Curd extends Component {
             this.props.create(dataItem)
         }
     }
+    popUpDelChange = (visible) => {
+        this.setState({ popUpDelVisible: visible })
+    }
+    deleteConfirm = (rowId) => {
+        this.setState({ popUpDelVisible: true, rowId })
+    }
+    deleteHandle = () => {
+        this.popUpDelChange(false)
+        this.props.deleted(this.state.rowId)
+    }
+    onPageChange = (currentIndex) => {
+        this.setState({ currentIndex })
+    }
+
 }

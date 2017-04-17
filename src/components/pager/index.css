@@ -1,0 +1,31 @@
+.normal {
+    margin: 10px;
+    font-size: 12px;
+    user-select: none;
+}
+
+.normal a {
+    padding: 2px 6px;
+    margin: 2px;
+    border: 1px solid #d8d8d8;
+    cursor: pointer;
+}
+
+.normal a:link {
+    color: #999;
+    background-color: #fff;
+}
+
+.normal a:hover {
+    background-color: #56ABEF;
+    color: #fff;
+}
+
+.normal a:active {
+    background-color: #0E77D1;
+}
+
+:global(.page-active) {
+    background-color: #0E77D1;
+    color: #fff;
+}
